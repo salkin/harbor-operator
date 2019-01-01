@@ -13,6 +13,7 @@ import (
 	sdkVersion "github.com/operator-framework/operator-sdk/version"
 	"github.com/salkin/harbor-operator/pkg/apis"
 	"github.com/salkin/harbor-operator/pkg/controller"
+	postgre "github.com/zalando-incubator/postgres-operator/pkg/apis/acid.zalan.do/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -74,6 +75,11 @@ func main() {
 
 	// Setup Scheme for all resources
 	if err := apis.AddToScheme(mgr.GetScheme()); err != nil {
+		log.Error(err, "")
+		os.Exit(1)
+	}
+
+	if err := postgre.AddToScheme(mgr.GetScheme()); err != nil {
 		log.Error(err, "")
 		os.Exit(1)
 	}

@@ -1,0 +1,9 @@
+apiVersion: app.goharbor.io/v1alpha1
+kind: Harbor
+metadata:
+  name: harbor
+spec:
+  version: dev
+  config:
+    extURL: http://harbor.minikube
+    logLevel: "debug"
