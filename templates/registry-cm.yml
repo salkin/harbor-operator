@@ -1,0 +1,33 @@
+version: 0.1
+log:
+  level: {{ .HarborData.LogLevel }}
+  fields:
+    service: registry
+storage:
+  {{- $storage := .HarborData.Storage }}
+  {{- $type := $storage.Type }}
+  {{- if eq $type "filesystem" }}
+  filesystem:
+    rootdirectory: /storage 
+    maxthreads: 100
+  {{- end }}
+  delete:
+    enablded: true
+http:
+  addr: :5000
+  debug:
+    addr: localhost:5001
+auth:
+  token:
+    issuer: harbor-token-issuer
+    realm: "{{ .HarborData.ExtEndpoint }}/service/token"
+    rootcertbundle: /etc/registry/root.crt
+    service: harbor-registry
+notifications:
+  endpoints:
+  - name: harbor
+    disabled: false
+    url: http://{{.HarborData.Name}}/service/notifications
+    timeout: 3000ms
+    threshold: 5
+    backoff: 1s
